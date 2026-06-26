@@ -1,725 +1,604 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Untuk Kamu ❤️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- Font awal dimuat -->
+  <link id="google-fonts-link" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Sacramento&family=Parisienne&family=Satisfy&family=Lora:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Crimson+Text:ital,wght@0,400;1,400&family=Pinyon+Script&family=Raleway:wght@300;400&family=Montserrat:wght@300;400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --rose:      #c0392b;
-      --rose-soft: #e57373;
-      --blush:     #f8bbd0;
-      --cream:     #fff8f0;
-      --deep:      #2c1a1a;
-      --gold:      #c9a96e;
-    }
-
     html { scroll-behavior: smooth; }
 
+    :root {
+      --FONT_JUDUL : 'Dancing Script', cursive;
+      --FONT_ISI   : 'Cormorant Garamond', serif;
+      --FONT_AKSEN : 'Playfair Display', serif;
+
+      --rose      : #c0392b;
+      --rose-soft : #e57373;
+      --blush     : #f8bbd0;
+      --cream     : #fff8f0;
+      --gold      : #c9a96e;
+    }
+
     body {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--FONT_ISI);
       background: #0a0005;
       color: var(--cream);
       overflow-x: hidden;
     }
 
-    /* ─── LEAF CANVAS ─── */
-    #leaf-canvas {
+    /* ══════════════════════════════════
+       FONT PICKER PANEL
+    ══════════════════════════════════ */
+    #font-picker-btn {
       position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 999;
-      display: none;
+      bottom: 24px; right: 24px;
+      z-index: 20000;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--rose);
+      border: 2px solid var(--gold);
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(192,57,91,.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    #font-picker-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(192,57,91,.7);
     }
 
-    /* ─── LANDING ─── */
-    #landing {
+    #font-panel {
       position: fixed;
-      inset: 0;
-      z-index: 9000;
+      bottom: 90px; right: 24px;
+      z-index: 20000;
+      width: 300px;
+      background: rgba(15,3,8,.97);
+      border: 1px solid rgba(201,169,110,.4);
+      border-radius: 16px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7);
+      backdrop-filter: blur(12px);
+      display: none;
+      flex-direction: column;
+      gap: .9rem;
+    }
+    #font-panel.open { display: flex; }
+
+    #font-panel h4 {
+      font-family: var(--FONT_JUDUL);
+      font-size: 1.2rem;
+      color: var(--gold);
+      text-align: center;
+      border-bottom: 1px solid rgba(201,169,110,.25);
+      padding-bottom: .7rem;
+    }
+
+    .font-row {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at center, #1a0010 0%, #000 100%);
+      gap: .35rem;
+    }
+    .font-row label {
+      font-family: var(--FONT_ISI);
+      font-size: .78rem;
+      color: var(--blush);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .font-row select {
+      width: 100%;
+      padding: .5rem .8rem;
+      border-radius: 8px;
+      border: 1px solid rgba(201,169,110,.3);
+      background: rgba(30,5,15,.8);
+      color: var(--cream);
+      font-size: .95rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color .3s ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a96e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .8rem center;
+      padding-right: 2rem;
+    }
+    .font-row select:hover,
+    .font-row select:focus { border-color: var(--gold); }
+
+    /* preview teks kecil di bawah select */
+    .font-preview {
+      font-size: 1rem;
+      color: #e8b4c8;
       text-align: center;
-      padding: 2rem;
+      padding: .25rem 0;
+      min-height: 1.5rem;
+      transition: font-family .4s ease;
+    }
+
+    .panel-note {
+      font-size: .72rem;
+      color: rgba(248,187,208,.5);
+      text-align: center;
+      line-height: 1.5;
+      border-top: 1px solid rgba(201,169,110,.15);
+      padding-top: .6rem;
+    }
+
+    /* ══════════════════════════════════
+       LANDING
+    ══════════════════════════════════ */
+    #landing {
+      position: fixed; inset: 0; z-index: 9000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at center, #1a0010 0%, #000 100%);
+      text-align: center; padding: 2rem;
       transition: opacity 1.2s ease, visibility 1.2s ease;
     }
     #landing.hide { opacity: 0; visibility: hidden; }
 
     .heart-anim {
-      font-size: 7rem;
+      font-size: 7rem; line-height: 1;
       animation: heartbeat 1.4s ease-in-out infinite;
       filter: drop-shadow(0 0 30px #c0392b99);
       margin-bottom: 1.5rem;
-      line-height: 1;
     }
     @keyframes heartbeat {
-      0%,100%{ transform: scale(1); }
-      14%    { transform: scale(1.18); }
-      28%    { transform: scale(1); }
-      42%    { transform: scale(1.12); }
-      70%    { transform: scale(1); }
+      0%,100%{ transform:scale(1); }
+      14%    { transform:scale(1.18); }
+      28%    { transform:scale(1); }
+      42%    { transform:scale(1.12); }
+      70%    { transform:scale(1); }
     }
-
     #landing h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      font-family: var(--FONT_JUDUL);
+      font-size: clamp(2.4rem,7vw,4.5rem);
       color: var(--blush);
       text-shadow: 0 0 40px #c0392b88;
       margin-bottom: 1rem;
     }
     #landing p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      color: #e8b4c8;
-      margin-bottom: 2.5rem;
-      line-height: 1.8;
-      max-width: 500px;
+      font-family: var(--FONT_ISI);
+      font-size: clamp(1rem,3vw,1.4rem);
+      color: #e8b4c8; margin-bottom: 2.5rem;
+      line-height: 1.8; max-width: 500px;
     }
-
     .btn-enter {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.4rem;
-      padding: .85rem 3rem;
-      border: 2px solid var(--rose);
-      background: transparent;
-      color: var(--blush);
-      border-radius: 50px;
-      cursor: pointer;
-      letter-spacing: .08em;
-      transition: all .4s ease;
-      position: relative;
-      overflow: hidden;
+      font-family: var(--FONT_JUDUL);
+      font-size: 1.4rem; padding: .85rem 3rem;
+      border: 2px solid var(--rose); background: transparent;
+      color: var(--blush); border-radius: 50px; cursor: pointer;
+      letter-spacing: .08em; transition: all .4s ease;
+      position: relative; overflow: hidden;
     }
     .btn-enter::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--rose);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .4s ease;
-      z-index: -1;
+      content:''; position:absolute; inset:0;
+      background:var(--rose); transform:scaleX(0);
+      transform-origin:left; transition:transform .4s ease; z-index:-1;
     }
-    .btn-enter:hover::before { transform: scaleX(1); }
-    .btn-enter:hover { color: #fff; box-shadow: 0 0 30px #c0392b88; }
+    .btn-enter:hover::before { transform:scaleX(1); }
+    .btn-enter:hover { color:#fff; box-shadow:0 0 30px #c0392b88; }
 
-    /* ─── MAIN SITE ─── */
-    #main-site {
-      display: none;
-      position: relative;
+    /* ══════════════════════════════════
+       MAIN SITE
+    ══════════════════════════════════ */
+    #main-site { display:none; position:relative; }
+    #main-site.show { display:block; }
+
+    #main-site::before {
+      content:''; position:fixed; inset:0;
+      background-image:url('background website.jpg');
+      background-size:cover; background-position:center;
+      background-attachment:fixed; opacity:.18; z-index:-1; pointer-events:none;
     }
-    #main-site.show { display: block; }
 
-    /* Falling leaves sidebar */
     .leaf-side {
-      position: fixed;
-      top: 0; bottom: 0;
-      width: 90px;
-      pointer-events: none;
-      z-index: 500;
-      overflow: hidden;
+      position:fixed; top:0; bottom:0; width:90px;
+      pointer-events:none; z-index:500; overflow:hidden;
     }
-    .leaf-side.left  { left: 0; }
-    .leaf-side.right { right: 0; }
-
+    .leaf-side.left  { left:0; }
+    .leaf-side.right { right:0; }
     .leaf {
-      position: absolute;
-      top: -60px;
-      font-size: 1.6rem;
-      animation: fall linear infinite;
-      opacity: .85;
-      filter: drop-shadow(0 0 4px #c0392b55);
+      position:absolute; top:-60px; font-size:1.6rem;
+      animation:fall linear infinite;
+      filter:drop-shadow(0 0 4px #c0392b55);
     }
     @keyframes fall {
-      0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: .9; }
-      50%  { transform: translateY(50vh) rotate(180deg) translateX(25px); }
-      100% { transform: translateY(110vh) rotate(360deg) translateX(-10px); opacity: 0; }
+      0%   { transform:translateY(0) rotate(0deg) translateX(0); opacity:.9; }
+      50%  { transform:translateY(50vh) rotate(180deg) translateX(25px); }
+      100% { transform:translateY(110vh) rotate(360deg) translateX(-10px); opacity:0; }
     }
 
-    /* ─── SECTION BASE ─── */
     section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 5rem 2rem;
-      position: relative;
-      overflow: hidden;
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:5rem 2rem; position:relative; overflow:hidden;
     }
-
     .bg-cover {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      z-index: 0;
+      position:absolute; inset:0;
+      background-size:cover; background-position:center; z-index:0;
     }
-    .bg-cover::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,.52);
+    .bg-cover::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,.52); }
+    section > *:not(.bg-cover) { position:relative; z-index:2; }
+
+    .divider {
+      width:120px; height:1px;
+      background:linear-gradient(to right,transparent,var(--gold),transparent);
+      margin:2rem auto;
     }
 
-    section > *:not(.bg-cover) { position: relative; z-index: 2; }
-
-    /* ─── KATA PEMBUKA (lain dimensi) ─── */
-    #pembuka {
-      background: transparent;
-    }
-    #pembuka .bg-cover {
-      background-image: url('background kata pembuka.jpg');
-      filter: saturate(1.2) brightness(.7);
-    }
+    /* PEMBUKA */
+    #pembuka .bg-cover { background-image:url('background kata pembuka.jpg'); filter:saturate(1.2) brightness(.65); }
     #pembuka::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
       background:
-        radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(80,0,30,.7) 100%),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 3px,
-          rgba(150,0,50,.04) 3px,
-          rgba(150,0,50,.04) 4px
-        );
-      z-index: 1;
-      pointer-events: none;
-      animation: scanline 8s linear infinite;
+        radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(80,0,30,.7) 100%),
+        repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(150,0,50,.04) 3px,rgba(150,0,50,.04) 4px);
+      animation:scanline 8s linear infinite;
     }
-    @keyframes scanline { from { background-position: 0 0; } to { background-position: 0 100px; } }
+    @keyframes scanline{ from{background-position:0 0;} to{background-position:0 100px;} }
 
     .dimension-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 6vw, 4rem);
-      font-style: italic;
-      letter-spacing: .12em;
-      color: var(--blush);
-      text-shadow: 0 0 60px #ff006688, 0 0 120px #ff006644;
-      animation: glitch 6s infinite;
-      text-align: center;
-      margin-bottom: 2rem;
+      font-family:var(--FONT_AKSEN);
+      font-size:clamp(2rem,6vw,4rem); font-style:italic; letter-spacing:.12em;
+      color:var(--blush); text-shadow:0 0 60px #ff006688,0 0 120px #ff006644;
+      animation:glitch 6s infinite; text-align:center; margin-bottom:2rem;
     }
     @keyframes glitch {
-      0%,95%,100% { text-shadow: 0 0 60px #ff006688; clip-path: none; }
-      96% { text-shadow: 4px 0 #00ffff88, -4px 0 #ff006688; clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
-      97% { text-shadow: -4px 0 #00ffff88, 4px 0 #ff006688; clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); }
-      98% { clip-path: none; }
+      0%,95%,100%{ text-shadow:0 0 60px #ff006688; clip-path:none; }
+      96%{ text-shadow:4px 0 #00ffff88,-4px 0 #ff006688; clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%); }
+      97%{ text-shadow:-4px 0 #00ffff88,4px 0 #ff006688; clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%); }
+      98%{ clip-path:none; }
     }
-
     .dimension-box {
-      max-width: 680px;
-      text-align: center;
-      border: 1px solid rgba(192,57,91,.4);
-      padding: 2.5rem;
-      border-radius: 4px;
-      background: rgba(20,0,10,.55);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 60px rgba(192,57,91,.2), inset 0 0 40px rgba(192,57,91,.05);
-      animation: float 5s ease-in-out infinite;
+      max-width:680px; text-align:center;
+      border:1px solid rgba(192,57,91,.4);
+      padding:2.5rem; border-radius:4px;
+      background:rgba(20,0,10,.55); backdrop-filter:blur(6px);
+      box-shadow:0 0 60px rgba(192,57,91,.2),inset 0 0 40px rgba(192,57,91,.05);
+      animation:floatY 5s ease-in-out infinite;
     }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
-    }
+    @keyframes floatY{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
     .dimension-box p {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      line-height: 2;
-      color: #f5d0e0;
-      font-style: italic;
+      font-family:var(--FONT_ISI);
+      font-size:clamp(1rem,2.5vw,1.3rem); line-height:2; color:#f5d0e0; font-style:italic;
     }
 
-    /* ─── FOTO SECTIONS ─── */
-    .foto-section .foto-title {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      color: var(--gold);
-      text-shadow: 0 2px 20px rgba(201,169,110,.5);
-      margin-bottom: 2rem;
-      text-align: center;
+    /* FOTO */
+    #foto1 .bg-cover { background-image:url('background foto1.jpg'); }
+    #foto2 .bg-cover { background-image:url('background foto2.jpg'); }
+
+    .foto-title {
+      font-family:var(--FONT_JUDUL);
+      font-size:clamp(2rem,5vw,3.2rem); color:var(--gold);
+      text-shadow:0 2px 20px rgba(201,169,110,.5);
+      margin-bottom:2rem; text-align:center;
     }
     .foto-card {
-      border-radius: 16px;
-      overflow: hidden;
-      max-width: 500px;
-      width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(201,169,110,.3);
-      margin-bottom: 2rem;
-      transform: translateY(40px);
-      opacity: 0;
-      transition: transform .9s cubic-bezier(.22,1,.36,1), opacity .9s ease;
+      border-radius:16px; overflow:hidden; max-width:500px; width:100%;
+      box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(201,169,110,.3);
+      margin-bottom:2rem;
+      opacity:0; transform:translateY(40px);
+      transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .9s ease;
     }
-    .foto-card.visible { transform: translateY(0); opacity: 1; }
-    .foto-card img {
-      width: 100%;
-      display: block;
-      object-fit: cover;
-      max-height: 420px;
+    .foto-card.visible { transform:translateY(0); opacity:1; }
+    .foto-card img { width:100%; display:block; object-fit:cover; max-height:420px; }
+    .foto-placeholder {
+      height:280px; background:rgba(192,57,91,.15);
+      display:flex; align-items:center; justify-content:center; font-size:4rem;
     }
     .foto-caption {
-      padding: 1.4rem 1.8rem;
-      background: rgba(20,5,10,.8);
-      font-size: 1.05rem;
-      line-height: 1.9;
-      color: #f0d0dc;
-      font-style: italic;
-      text-align: center;
-      border-top: 1px solid rgba(201,169,110,.2);
+      font-family:var(--FONT_ISI);
+      padding:1.4rem 1.8rem; background:rgba(20,5,10,.8);
+      font-size:1.05rem; line-height:1.9; color:#f0d0dc; font-style:italic;
+      text-align:center; border-top:1px solid rgba(201,169,110,.2);
     }
 
-    /* ─── PESAN SECTIONS ─── */
-    .pesan-section {
-      background: transparent;
-    }
+    /* PESAN */
+    #pesan-tengah .bg-cover { background-image:url('background pesan.jpg'); }
+    #pesan-akhir  .bg-cover { background-image:url('background pesan.jpg'); }
+
     .pesan-box {
-      max-width: 700px;
-      width: 100%;
-      padding: 3.5rem;
-      border-radius: 12px;
-      text-align: center;
-      background: rgba(15,3,8,.7);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(192,57,91,.25);
-      box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
-      transform: translateY(50px);
-      opacity: 0;
-      transition: transform 1s cubic-bezier(.22,1,.36,1), opacity 1s ease;
+      max-width:700px; width:100%; padding:3.5rem; border-radius:12px;
+      text-align:center; background:rgba(15,3,8,.7); backdrop-filter:blur(10px);
+      border:1px solid rgba(192,57,91,.25);
+      box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);
+      opacity:0; transform:translateY(50px);
+      transition:transform 1s cubic-bezier(.22,1,.36,1),opacity 1s ease;
     }
-    .pesan-box.visible { transform: translateY(0); opacity: 1; }
+    .pesan-box.visible { transform:translateY(0); opacity:1; }
     .pesan-box h2 {
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      color: var(--rose-soft);
-      margin-bottom: 1.5rem;
+      font-family:var(--FONT_JUDUL);
+      font-size:clamp(1.8rem,5vw,2.8rem); color:var(--rose-soft); margin-bottom:1.5rem;
     }
     .pesan-box p {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      line-height: 2.1;
-      color: #f0d0dc;
-      font-style: italic;
+      font-family:var(--FONT_ISI);
+      font-size:clamp(1rem,2.5vw,1.25rem); line-height:2.1; color:#f0d0dc; font-style:italic;
     }
 
-    /* ─── PESAN SECTION BG (background pesan.jpg) ─── */
-    #pesan-tengah .bg-cover { background-image: url('background pesan.jpg'); }
-    #pesan-akhir  .bg-cover { background-image: url('background pesan.jpg'); }
-
-    /* ─── FOTO 1 & 2 BACKGROUNDS ─── */
-    #foto1 .bg-cover { background-image: url('background foto1.jpg'); }
-    #foto2 .bg-cover { background-image: url('background foto2.jpg'); }
-
-    /* ─── SURAT SECTION ─── */
-    #surat-section {
-      min-height: 60vh;
-    }
-    #surat-section .bg-cover { background-image: url('background surat akhir.jpg'); }
-
+    /* SURAT */
+    #surat-section .bg-cover { background-image:url('background surat akhir.jpg'); }
     .surat-envelope {
-      font-size: 5rem;
-      cursor: pointer;
-      transition: transform .4s ease, filter .4s ease;
-      filter: drop-shadow(0 0 20px #c0392b77);
-      animation: hover-env 3s ease-in-out infinite;
-      display: block;
-      text-align: center;
-      margin-bottom: 1rem;
+      font-size:5rem; cursor:pointer; display:block; text-align:center; margin-bottom:1rem;
+      filter:drop-shadow(0 0 20px #c0392b77);
+      animation:hoverEnv 3s ease-in-out infinite; transition:filter .4s ease;
     }
-    @keyframes hover-env { 0%,100%{ transform: translateY(0) rotate(-3deg); } 50%{ transform: translateY(-12px) rotate(3deg); } }
-    .surat-envelope:hover { filter: drop-shadow(0 0 40px #c0392b); }
-
+    @keyframes hoverEnv{ 0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-12px) rotate(3deg);} }
+    .surat-envelope:hover { filter:drop-shadow(0 0 40px #c0392b); }
     .surat-hint {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--blush);
-      text-align: center;
-      margin-bottom: 2rem;
-      animation: pulse-text 2s ease-in-out infinite;
+      font-family:var(--FONT_ISI); font-style:italic; font-size:1.1rem;
+      color:var(--blush); text-align:center; margin-bottom:2rem;
+      animation:pulseT 2s ease-in-out infinite;
     }
-    @keyframes pulse-text { 0%,100%{ opacity: 1; } 50%{ opacity: .5; } }
+    @keyframes pulseT{ 0%,100%{opacity:1;} 50%{opacity:.5;} }
 
-    /* ─── MODAL SURAT ─── */
+    /* MODAL SURAT */
     #modal-surat {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 8000;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      background: rgba(0,0,0,.75);
-      backdrop-filter: blur(8px);
+      display:none; position:fixed; inset:0; z-index:8000;
+      align-items:center; justify-content:center; padding:1.5rem;
+      background:rgba(0,0,0,.75); backdrop-filter:blur(8px);
     }
-    #modal-surat.open { display: flex; }
-
+    #modal-surat.open { display:flex; }
     .surat-content {
-      position: relative;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,.7), 0 0 0 1px rgba(201,169,110,.3);
-      animation: slide-up .6s cubic-bezier(.22,1,.36,1);
+      position:relative; max-width:600px; width:100%;
+      border-radius:12px; overflow:hidden;
+      box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(201,169,110,.3);
+      animation:slideUp .6s cubic-bezier(.22,1,.36,1);
     }
-    @keyframes slide-up { from{ transform: translateY(60px); opacity: 0; } to{ transform: translateY(0); opacity: 1; } }
-
+    @keyframes slideUp{ from{transform:translateY(60px);opacity:0;} to{transform:translateY(0);opacity:1;} }
     .surat-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('background pesan.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: brightness(.5) saturate(1.4);
+      position:absolute; inset:0;
+      background-image:url('background pesan.jpg');
+      background-size:cover; background-position:center;
+      filter:brightness(.5) saturate(1.4);
     }
     .surat-inner {
-      position: relative;
-      padding: 3rem 2.5rem;
-      background: rgba(10,0,5,.65);
-      backdrop-filter: blur(4px);
-      text-align: center;
+      position:relative; padding:3rem 2.5rem;
+      background:rgba(10,0,5,.65); backdrop-filter:blur(4px); text-align:center;
     }
-    .surat-inner h3 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2rem;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-    }
-    .surat-inner p {
-      font-size: 1.1rem;
-      line-height: 2;
-      color: #f5d0e0;
-      font-style: italic;
-      margin-bottom: 1.5rem;
-    }
-    .surat-nama {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.4rem;
-      color: var(--rose-soft);
-      margin-top: 1rem;
-    }
+    .surat-inner h3 { font-family:var(--FONT_JUDUL); font-size:2rem; color:var(--gold); margin-bottom:1.5rem; }
+    .surat-inner p  { font-family:var(--FONT_ISI); font-size:1.1rem; line-height:2; color:#f5d0e0; font-style:italic; margin-bottom:1rem; }
+    .surat-nama     { font-family:var(--FONT_JUDUL); font-size:1.4rem; color:var(--rose-soft); margin-top:1rem; }
     .btn-tutup {
-      margin-top: 1.5rem;
-      padding: .7rem 2.5rem;
-      border: 1px solid var(--rose-soft);
-      background: transparent;
-      color: var(--blush);
-      border-radius: 50px;
-      cursor: pointer;
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.2rem;
-      transition: all .3s ease;
+      margin-top:1.5rem; padding:.7rem 2.5rem;
+      border:1px solid var(--rose-soft); background:transparent;
+      color:var(--blush); border-radius:50px; cursor:pointer;
+      font-family:var(--FONT_JUDUL); font-size:1.2rem; transition:all .3s ease;
     }
-    .btn-tutup:hover { background: var(--rose); color: #fff; }
+    .btn-tutup:hover { background:var(--rose); color:#fff; }
 
-    /* ─── PENUTUP (lain dimensi) ─── */
-    #penutup {
-      background: transparent;
-      min-height: 100vh;
-    }
-    #penutup .bg-cover { background-image: url('background penutup.jpg'); filter: saturate(1.2) brightness(.6); }
+    /* PENUTUP */
+    #penutup .bg-cover { background-image:url('background penutup.jpg'); filter:saturate(1.2) brightness(.55); }
     #penutup::before {
-      content: '';
-      position: absolute; inset: 0; z-index: 1;
-      background: radial-gradient(ellipse at center, rgba(40,0,20,.5) 0%, rgba(0,0,0,.75) 100%);
+      content:''; position:absolute; inset:0; z-index:1;
+      background:radial-gradient(ellipse at center,rgba(40,0,20,.5) 0%,rgba(0,0,0,.75) 100%);
     }
-
-    .penutup-wrap {
-      text-align: center;
-      max-width: 650px;
-    }
-    .penutup-wrap .dimension-title { margin-bottom: 1.5rem; }
+    .penutup-wrap { text-align:center; max-width:650px; }
     .penutup-box {
-      border: 1px solid rgba(201,169,110,.35);
-      padding: 2.5rem;
-      border-radius: 8px;
-      background: rgba(10,0,5,.6);
-      backdrop-filter: blur(8px);
-      margin-bottom: 2.5rem;
-      animation: float 6s ease-in-out infinite;
+      border:1px solid rgba(201,169,110,.35); padding:2.5rem; border-radius:8px;
+      background:rgba(10,0,5,.6); backdrop-filter:blur(8px);
+      margin-bottom:2.5rem; animation:floatY 6s ease-in-out infinite;
     }
-    .penutup-box p {
-      font-size: 1.15rem;
-      line-height: 2;
-      color: #f5d0e0;
-      font-style: italic;
-    }
-
+    .penutup-box p { font-family:var(--FONT_ISI); font-size:1.15rem; line-height:2; color:#f5d0e0; font-style:italic; }
     .btn-close-site {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.3rem;
-      padding: .9rem 3rem;
-      border: 2px solid var(--gold);
-      background: transparent;
-      color: var(--gold);
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all .4s ease;
-      position: relative;
-      overflow: hidden;
+      font-family:var(--FONT_JUDUL); font-size:1.3rem; padding:.9rem 3rem;
+      border:2px solid var(--gold); background:transparent; color:var(--gold);
+      border-radius:50px; cursor:pointer; transition:all .4s ease;
+      position:relative; overflow:hidden;
     }
     .btn-close-site::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: var(--gold);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .4s ease;
-      z-index: -1;
+      content:''; position:absolute; inset:0; background:var(--gold);
+      transform:scaleX(0); transform-origin:left; transition:transform .4s ease; z-index:-1;
     }
-    .btn-close-site:hover::before { transform: scaleX(1); }
-    .btn-close-site:hover { color: #000; }
+    .btn-close-site:hover::before { transform:scaleX(1); }
+    .btn-close-site:hover { color:#000; }
 
-    /* ─── POHON GUGUR OVERLAY ─── */
+    /* GUGUR */
     #gugur-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      background: rgba(0,0,0,.85);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
+      display:none; position:fixed; inset:0; z-index:10000;
+      background:rgba(0,0,0,.88); flex-direction:column;
+      align-items:center; justify-content:center; text-align:center; padding:2rem;
     }
-    #gugur-overlay.show { display: flex; }
-    #tree-canvas {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    .gugur-texts {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
+    #gugur-overlay.show { display:flex; }
+    #tree-canvas { position:absolute; inset:0; pointer-events:none; }
+    .gugur-texts { position:relative; z-index:2; display:flex; flex-direction:column; gap:1.8rem; }
     .gugur-line {
-      font-family: 'Dancing Script', cursive;
-      color: var(--blush);
-      text-shadow: 0 0 30px #c0392b88;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .8s ease, transform .8s ease;
+      font-family:var(--FONT_JUDUL); color:var(--blush);
+      text-shadow:0 0 30px #c0392b88;
+      opacity:0; transform:translateY(20px);
+      transition:opacity .8s ease,transform .8s ease;
     }
-    .gugur-line:nth-child(1) { font-size: clamp(1.8rem, 5vw, 3rem); }
-    .gugur-line:nth-child(2) { font-size: clamp(1.2rem, 3vw, 2rem); }
-    .gugur-line:nth-child(3) { font-size: clamp(1rem, 2.5vw, 1.6rem); color: var(--gold); }
-    .gugur-line:nth-child(4) { font-size: clamp(1rem, 2.5vw, 1.4rem); font-style: italic; }
-    .gugur-line.show { opacity: 1; transform: translateY(0); }
+    .gugur-line:nth-child(1){ font-size:clamp(1.8rem,5vw,3rem); }
+    .gugur-line:nth-child(2){ font-size:clamp(1.2rem,3vw,2rem); }
+    .gugur-line:nth-child(3){ font-size:clamp(1rem,2.5vw,1.6rem); color:var(--gold); }
+    .gugur-line:nth-child(4){ font-family:var(--FONT_ISI); font-size:clamp(1rem,2.5vw,1.4rem); font-style:italic; }
+    .gugur-line.show { opacity:1; transform:translateY(0); }
 
-    /* ─── AUDIO ─── */
-    #bg-audio { display: none; }
+    [data-reveal] { opacity:0; transform:translateY(40px); transition:opacity .9s ease,transform .9s ease; }
+    [data-reveal].visible { opacity:1; transform:translateY(0); }
 
-    /* ─── SCROLL REVEAL ─── */
-    [data-reveal] {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity .9s ease, transform .9s ease;
-    }
-    [data-reveal].visible { opacity: 1; transform: translateY(0); }
-
-    /* ─── DIVIDER ─── */
-    .divider {
-      width: 120px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
-      margin: 2rem auto;
-    }
-
-    /* ─── WEBSITE BACKGROUND ─── */
-    #main-site::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url('background website.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      opacity: .18;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 600px) {
-      .dimension-box, .pesan-box, .surat-inner { padding: 2rem 1.3rem; }
-      .leaf-side { width: 50px; }
+    @media(max-width:600px){
+      .dimension-box,.pesan-box,.surat-inner{ padding:2rem 1.3rem; }
+      .leaf-side{ width:50px; }
+      #font-panel{ width:calc(100vw - 48px); right:24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ───────────────── AUDIO ───────────────── -->
-<audio id="bg-audio" loop>
-  <source src="lagu.mp3" type="audio/mpeg"/>
-</audio>
+<audio id="bg-audio" loop><source src="lagu.mp3" type="audio/mpeg"/></audio>
 
-<!-- ───────────────── LANDING ───────────────── -->
+<!-- ══ FONT PICKER ══ -->
+<button id="font-picker-btn" onclick="togglePanel()" title="Ganti Font">🔤</button>
+
+<div id="font-panel">
+  <h4>🎨 Pilih Font</h4>
+
+  <div class="font-row">
+    <label>Font Judul & Tombol</label>
+    <select id="sel-judul" onchange="gantiFont('judul', this.value)">
+      <option value="Dancing Script">Dancing Script ✦ (bawaan)</option>
+      <option value="Great Vibes">Great Vibes</option>
+      <option value="Sacramento">Sacramento</option>
+      <option value="Parisienne">Parisienne</option>
+      <option value="Pinyon Script">Pinyon Script</option>
+      <option value="Satisfy">Satisfy</option>
+    </select>
+    <div class="font-preview" id="prev-judul" style="font-family:'Dancing Script',cursive">Untuk Kamu ❤️</div>
+  </div>
+
+  <div class="font-row">
+    <label>Font Isi Pesan & Teks</label>
+    <select id="sel-isi" onchange="gantiFont('isi', this.value)">
+      <option value="Cormorant Garamond">Cormorant Garamond ✦ (bawaan)</option>
+      <option value="Lora">Lora</option>
+      <option value="EB Garamond">EB Garamond</option>
+      <option value="Libre Baskerville">Libre Baskerville</option>
+      <option value="Crimson Text">Crimson Text</option>
+      <option value="Raleway">Raleway</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Josefin Sans">Josefin Sans</option>
+    </select>
+    <div class="font-preview" id="prev-isi" style="font-family:'Cormorant Garamond',serif">Perasaan ini nyata untukmu...</div>
+  </div>
+
+  <div class="font-row">
+    <label>Font Efek Dimensi</label>
+    <select id="sel-aksen" onchange="gantiFont('aksen', this.value)">
+      <option value="Playfair Display">Playfair Display ✦ (bawaan)</option>
+      <option value="Great Vibes">Great Vibes</option>
+      <option value="Lora">Lora</option>
+      <option value="EB Garamond">EB Garamond</option>
+      <option value="Libre Baskerville">Libre Baskerville</option>
+    </select>
+    <div class="font-preview" id="prev-aksen" style="font-family:'Playfair Display',serif;font-style:italic">✦ Dari Dunia yang Lain ✦</div>
+  </div>
+
+  <p class="panel-note">Perubahan font langsung terlihat di semua teks website 🌸</p>
+</div>
+
+<!-- ══ LANDING ══ -->
 <div id="landing">
   <div class="heart-anim">❤️</div>
-  <h1>UNTUK PACAR AKU NAURA</h1>
-  <p>Ada sesuatu yang mau aku sampaikan beb,<br/>ini dari hati aku yaa sayng.</p>
+  <h1>UNTUK NAURA SPECIAL</h1>
+  <p>Ada sesuatu yang ingin aku sampaikan beb ,<br/>ini isi hati aku sendiri.</p>
   <button class="btn-enter" onclick="enterSite()">✦ Buka Pesan ✦</button>
 </div>
 
-<!-- ───────────────── LEAF CANVAS (portable) ───────────────── -->
-<canvas id="leaf-canvas"></canvas>
-
-<!-- ───────────────── MAIN SITE ───────────────── -->
+<!-- ══ MAIN SITE ══ -->
 <div id="main-site">
-
-  <!-- Leaf sidebars -->
   <div class="leaf-side left"  id="leaf-left"></div>
   <div class="leaf-side right" id="leaf-right"></div>
 
-  <!-- ── 1. KATA PEMBUKA (lain dimensi) ── -->
   <section id="pembuka">
     <div class="bg-cover"></div>
-    <div class="dimension-title" data-reveal>✦ beb maafin aku ya ✦</div>
+    <div class="dimension-title" data-reveal>✦ Dari yunda ✦</div>
     <div class="dimension-box" data-reveal>
-      <p>
-       akhir2 jarang chat kamu
-        pasti kamu marah,atau mikirin aku kenapa gdk cht kamu .<br/><br/>
-        aku tau kamu mau marah tapi hati kamu engga bisa 
-        terus kamu orangnya ga tegaan punya hati yang baik 
-        maknya aku beruntung punya kamu beb
-        ga tau kayak bruntunga aj 
-        
-      </p>
+      <p>Kalau maaf ya beb akhir2 ii aku jarang cht kamu -
+      aku tau kamu khawatir atau mau narah.<br/><br/>
+     tapi karena kamu orangnya gaenakan dan punya hati yang baik,walau pun sama pacar s .</p>
     </div>
     <div class="divider"></div>
   </section>
 
-  <!-- ── 2. FOTO 1 ── -->
-  <section id="foto1" class="foto-section">
+  <section id="foto1">
     <div class="bg-cover"></div>
     <div class="foto-title" data-reveal>📷 INI FOTO FAVORITE AKU BEB</div>
     <div class="foto-card" id="foto-card-1">
-      <img src="foto1.jpg" alt="Foto bersama" onerror="this.style.display='none';this.parentElement.querySelector('.foto-placeholder').style.display='flex'"/>
-      <div class="foto-placeholder" style="display:none;height:280px;background:rgba(192,57,91,.15);align-items:center;justify-content:center;font-size:4rem;">📸</div>
-      <div class="foto-caption">
-        Aku tau menurut kamu ini foto biasa<br/>
-      tapi menurut  pacar kamu ini adalah foto spesial buat aku yang ga bisa aku lupain 
-        ini foto yang kamu palinggg cantikkkk sampai aku ga nyngka punya pacar secantik ini
-      </div>
+      <img src="foto1.jpg" alt="Foto 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="foto-placeholder" style="display:none">📸</div>
+      <div class="foto-caption">Aku tau menurut kamu ini foto biasa ,<br/>tapi menurut  pacar kamu ini adalah foto spesial buat aku yang ga bisa aku lupain.</div>
+                             di foto ini kamu tuh cantikk banget sampai aku ga nyangka punya pacar secantik ini beb,aplagi kamu jarang makeup
     </div>
   </section>
 
-  <!-- ── 3. PESAN TENGAH ── -->
-  <section id="pesan-tengah" class="pesan-section">
+  <section id="pesan-tengah">
     <div class="bg-cover"></div>
     <div class="pesan-box" id="pesan-box-1">
-      <h2>Udah mam belum beb?</h2>
+      <h2>udah mam belum sayang?</h2>
       <div class="divider"></div>
-      <p>
-       akhir2 ini kamu jarang makan beb 
-        sampai kamu lupa sama diri kamu sendiri sampai kamu sakit.<br/><br/>
-       aku tau beb kamu ga mau makn kalau belum ngeml dimsum 
-        tapi pikirin keadan kamu juga sayng aku ga mau kamu kenapa napa
-      </p>
+      <p>akhir-akhir ini kamu suka telat makan dan sampai ga nyadar kalau kamu lagi sakit
+      plis jangn begitu beb aku ga mau kamu sakit atau terluka.<br/><br/>
+      aku tau kamu ga mau makan kalau belum ngemil dimsum 
+      .</p>
     </div>
   </section>
 
-  <!-- ── 4. FOTO 2 ── -->
-  <section id="foto2" class="foto-section">
+  <section id="foto2">
     <div class="bg-cover"></div>
-    <div class="foto-title" data-reveal>🌹FOTO yang kamu kirim untuk pertama kalinya</div>
+    <div class="foto-title" data-reveal>🌹 untuk foto ini......</div>
     <div class="foto-card" id="foto-card-2">
-      <img src="foto2.jpg" alt="Foto kedua" onerror="this.style.display='none';this.parentElement.querySelector('.foto-placeholder').style.display='flex'"/>
-      <div class="foto-placeholder" style="display:none;height:280px;background:rgba(192,57,91,.15);align-items:center;justify-content:center;font-size:4rem;">🌹</div>
-      <div class="foto-caption">
-        ni foto yang kamu kirim untuk pertama kalinya beb ke aku 
-        dan situ itu aku seneng bangetttt beb sampai aku lihatin terus fotonyaaaaa 
-        karena aku ganyangka bisa kenalan sama cewe secantik kamu
-      </div>
+      <img src="foto2.jpg" alt="Foto 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="foto-placeholder" style="display:none">🌹</div>
+      <div class="foto-caption">Ini foto yang kamu kirim untuk pertama kalinya ke aku dan saat itu aku seneng bangetttt sampai aku lihatin terus fotonyaaaaa.</div>
+      aku masih ga nyangka aj kenalan sama cewe secantik kamu terus jadi pacar aku lagi
     </div>
   </section>
 
-  <!-- ── 5. PESAN AKHIR ── -->
-  <section id="pesan-akhir" class="pesan-section">
+  <section id="pesan-akhir">
     <div class="bg-cover"></div>
     <div class="pesan-box" id="pesan-box-2">
       <h2>Yang Ingin Aku Katakan</h2>
       <div class="divider"></div>
-      <p>
-        Terima kasih beb .<br/><br/>
-       aku ga memiliki kata-kata yang indah beb buat di ucapin maaf ya tapi aku beruntung punya kamuu.
-      </p>
+      <p>aku ga memiliki kata-kata yang indah beb buat di ucapin maaf ya 
+        tapi aku beruntung punya kamuu.<br/><br/>
+      kamu tuh sayng banget kalau disia siain aku paham banget, 
+        tapi jaak kita jauh beb .</p>
     </div>
   </section>
 
-  <!-- ── 6. SURAT ── -->
   <section id="surat-section">
     <div class="bg-cover"></div>
-    <div data-reveal style="text-align:center;">
-      <div class="dimension-title">✉️Pesan terakhir sayng</div>
+    <div data-reveal style="text-align:center">
+      <div class="dimension-title">✉️ Ada Surat Untukmu</div>
       <span class="surat-envelope" onclick="bukaModal()">💌</span>
       <p class="surat-hint">— klik amplop untuk membuka —</p>
     </div>
   </section>
 
-  <!-- ── 7. PENUTUP (lain dimensi) ── -->
   <section id="penutup">
     <div class="bg-cover"></div>
     <div class="penutup-wrap" data-reveal>
-      <div class="dimension-title">✦ Di baca pelan-pelan ya beb ✦</div>
+      <div class="dimension-title">✦ Sebelum Kita Berpisah ✦</div>
       <div class="penutup-box">
-        <p>
-         Kenapa akhir ini kamu selalu nutupin msalah kamu dari mulai sakit,
-          yang katanya kamu di jepang tapi ga pernah tuh pao kalau kamu disana,
-          so kenapa harus di tutupin kenapa kalau ada apaoun kamu ga cerita ke aku , 
-          kalau kamu gini terus aku jadi merasa bukan pacar kamu . 
-          Kalau kamu udah bosen sama aku bilang aj sayang aku ga akan marah dan aku terima semua itu💬 
-          aku masih belum yakin sama diri aku sendiri jadi jngn terlalu berharap sama aku ya sayangg
-          takutnya kamu sakut hati aku ga mau kamu terluka seidkitpun
-          karena kamu itu sangatttt sepcial di mata akuuu thak you udah mau jadi pacar aku yaaa thk you LOVE U
-        </p>
+        <p>makasih ya sayng udah mau baca aku harap kamu paham 
+          <br/><br/>
+       beb sering jaga diri kamu baik-baik ya sayn,okeyy 💕</p>
       </div>
       <button class="btn-close-site" onclick="tutupSite()">✦ Tutup dengan Cinta ✦</button>
     </div>
   </section>
+</div>
 
-</div><!-- end #main-site -->
-
-<!-- ───────────────── MODAL SURAT ───────────────── -->
+<!-- ══ MODAL SURAT ══ -->
 <div id="modal-surat">
   <div class="surat-content">
     <div class="surat-bg"></div>
     <div class="surat-inner">
-      <h3>Surat pacar kamu 💌</h3>
-      <p>
-        aku tau beb kamu orangnya gengsian,<br/>
-        kalau aku lihat senyuman kamu di foto rasanya cape aku hilang beb,<br/>
-         —
-      </p>
-      <p>
-        Aku ingin kamu tahu bahwa perasaan ini nyata.
-        Bukan karena terpaksa, bukan karena terbiasa,
-        tapi karena kamu benar-benar istimewa.
-        Dan aku bersyukur bisa mengenalmu.
-      </p>
-      <p>
-        Apa pun yang terjadi nanti,
-        aku hanya ingin kamu bahagia.
-        Selalu. 🌹
-      </p>
+      <h3>Surat Untuk kamu beb 💌</h3>
+      <p>Kenapa akhir ini kamu selalu nutupin msalah kamu dari mulai sakit,
+        yang katanya kamu di jepang tapi ga pernah tuh pao kalau kamu disana,
+    so kenapa harus di tutupin kenapa kalau ada apaoun kamu ga cerita ke aku , 
+        kalau kamu gini terus aku jadi merasa bukan pacar kamu . 
+        Kalau kamu udah bosen sama aku bilang aj sayang aku ga akan marah dan aku terima semua itu💬
+        aku masih belum yakin sama diri aku sendiri jadi jngn terlalu berharap sama aku ya sayangg takutnya kamu sakut hati aku ga mau kamu terluka seidkitpun karena
+        kamu itu sangatttt sepcial di mata akuuu thak you udah mau jadi pacar aku yaaa thk you LOVE U
       <div class="divider"></div>
-      <div class="surat-nama">— Dengan sepenuh hati, Darimu ❤️</div>
+      <div class="surat-nama">— Dengan sepenuh hati, yunda❤️</div>
       <button class="btn-tutup" onclick="tutupModal()">✕ Tutup Surat</button>
     </div>
   </div>
 </div>
 
-<!-- ───────────────── GUGUR OVERLAY ───────────────── -->
+<!-- ══ GUGUR OVERLAY ══ -->
 <div id="gugur-overlay">
   <canvas id="tree-canvas"></canvas>
   <div class="gugur-texts">
@@ -731,162 +610,130 @@
 </div>
 
 <script>
-// ─────────────────────────────────────────────
-//  ENTER SITE
-// ─────────────────────────────────────────────
+/* ══ FONT PICKER ══ */
+const FONT_FALLBACK = {
+  'Dancing Script':'cursive','Great Vibes':'cursive','Sacramento':'cursive',
+  'Parisienne':'cursive','Pinyon Script':'cursive','Satisfy':'cursive',
+  'Cormorant Garamond':'serif','Lora':'serif','EB Garamond':'serif',
+  'Libre Baskerville':'serif','Crimson Text':'serif','Playfair Display':'serif',
+  'Raleway':'sans-serif','Montserrat':'sans-serif','Josefin Sans':'sans-serif',
+};
+
+function togglePanel() {
+  document.getElementById('font-panel').classList.toggle('open');
+}
+
+function gantiFont(jenis, nama) {
+  const fallback = FONT_FALLBACK[nama] || 'serif';
+  const val = `'${nama}', ${fallback}`;
+
+  if (jenis === 'judul') {
+    document.documentElement.style.setProperty('--FONT_JUDUL', val);
+    document.getElementById('prev-judul').style.fontFamily = val;
+  } else if (jenis === 'isi') {
+    document.documentElement.style.setProperty('--FONT_ISI', val);
+    document.getElementById('prev-isi').style.fontFamily = val;
+  } else {
+    document.documentElement.style.setProperty('--FONT_AKSEN', val);
+    document.getElementById('prev-aksen').style.fontFamily = val;
+  }
+}
+
+/* ══ ENTER ══ */
 function enterSite() {
   document.getElementById('landing').classList.add('hide');
   setTimeout(() => {
     document.getElementById('main-site').classList.add('show');
     spawnLeaves();
     initScrollReveal();
-    const audio = document.getElementById('bg-audio');
-    audio.play().catch(() => {});
+    document.getElementById('bg-audio').play().catch(()=>{});
   }, 1200);
 }
 
-// ─────────────────────────────────────────────
-//  LEAVES SIDEBAR
-// ─────────────────────────────────────────────
-const EMOJIS = ['🍂','🍁','❤️','🌹','💕','💗'];
-
+/* ══ LEAVES ══ */
+const EMOJIS = ['🍂','🍁','❤️','🌹','💕','💗','🌸'];
 function makeLeaf(side) {
   const el = document.createElement('span');
   el.className = 'leaf';
-  el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-  el.style.left    = Math.random() * 70 + 'px';
-  el.style.fontSize = (1 + Math.random() * .8) + 'rem';
-  el.style.animationDuration  = (5 + Math.random() * 7) + 's';
-  el.style.animationDelay     = (Math.random() * 8) + 's';
-  el.style.opacity = (.6 + Math.random() * .4).toString();
+  el.textContent = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+  el.style.left = Math.random()*70+'px';
+  el.style.fontSize = (1+Math.random()*.8)+'rem';
+  el.style.animationDuration = (5+Math.random()*7)+'s';
+  el.style.animationDelay = (Math.random()*8)+'s';
+  el.style.opacity = (.6+Math.random()*.4).toString();
   side.appendChild(el);
-  el.addEventListener('animationiteration', () => {
-    el.style.left = Math.random() * 70 + 'px';
-  });
+  el.addEventListener('animationiteration',()=>{ el.style.left=Math.random()*70+'px'; });
 }
-
 function spawnLeaves() {
-  const L = document.getElementById('leaf-left');
-  const R = document.getElementById('leaf-right');
-  for (let i = 0; i < 12; i++) { makeLeaf(L); makeLeaf(R); }
+  const L=document.getElementById('leaf-left'), R=document.getElementById('leaf-right');
+  for(let i=0;i<14;i++){ makeLeaf(L); makeLeaf(R); }
 }
 
-// ─────────────────────────────────────────────
-//  SCROLL REVEAL
-// ─────────────────────────────────────────────
+/* ══ SCROLL REVEAL ══ */
 function initScrollReveal() {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: .15 });
-
-  document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
-
-  // foto cards & pesan boxes
-  const cardObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: .2 });
-
-  document.querySelectorAll('.foto-card, .pesan-box').forEach(el => cardObs.observe(el));
+  const obs = new IntersectionObserver(e=>e.forEach(x=>{ if(x.isIntersecting) x.target.classList.add('visible'); }),{threshold:.15});
+  document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+  const obs2 = new IntersectionObserver(e=>e.forEach(x=>{ if(x.isIntersecting) x.target.classList.add('visible'); }),{threshold:.2});
+  document.querySelectorAll('.foto-card,.pesan-box').forEach(el=>obs2.observe(el));
 }
 
-// ─────────────────────────────────────────────
-//  MODAL SURAT
-// ─────────────────────────────────────────────
+/* ══ MODAL ══ */
 function bukaModal()  { document.getElementById('modal-surat').classList.add('open'); }
 function tutupModal() { document.getElementById('modal-surat').classList.remove('open'); }
+document.getElementById('modal-surat').addEventListener('click',function(e){ if(e.target===this) tutupModal(); });
 
-document.getElementById('modal-surat').addEventListener('click', function(e) {
-  if (e.target === this) tutupModal();
-});
-
-// ─────────────────────────────────────────────
-//  TUTUP SITE → POHON GUGUR
-// ─────────────────────────────────────────────
+/* ══ TUTUP SITE ══ */
 function tutupSite() {
-  const overlay = document.getElementById('gugur-overlay');
-  overlay.classList.add('show');
-  drawTree();
-  animateParticles();
-  const lines = ['g1','g2','g3','g4'];
-  lines.forEach((id, i) => {
-    setTimeout(() => document.getElementById(id).classList.add('show'), 500 + i * 700);
+  document.getElementById('gugur-overlay').classList.add('show');
+  drawTree(); animateParticles();
+  ['g1','g2','g3','g4'].forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('show'), 600+i*750);
   });
 }
-
-// ── Draw stylized tree ──
 function drawTree() {
-  const canvas = document.getElementById('tree-canvas');
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  function branch(x, y, angle, length, depth) {
-    if (depth === 0 || length < 3) return;
-    const x2 = x + Math.cos(angle) * length;
-    const y2 = y + Math.sin(angle) * length;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = `rgba(${140 + depth * 8},${50 + depth * 4},${60 + depth * 3},${0.4 + depth * 0.05})`;
-    ctx.lineWidth = depth * .9;
-    ctx.stroke();
-    branch(x2, y2, angle - .35 + Math.random() * .15, length * .72, depth - 1);
-    branch(x2, y2, angle + .35 - Math.random() * .15, length * .72, depth - 1);
+  const c=document.getElementById('tree-canvas');
+  c.width=window.innerWidth; c.height=window.innerHeight;
+  const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  function branch(x,y,a,len,d){
+    if(d===0||len<3)return;
+    const x2=x+Math.cos(a)*len, y2=y+Math.sin(a)*len;
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2);
+    ctx.strokeStyle=`rgba(${140+d*8},${50+d*4},${60+d*3},${.35+d*.05})`;
+    ctx.lineWidth=d*.85; ctx.stroke();
+    branch(x2,y2,a-.35+Math.random()*.15,len*.72,d-1);
+    branch(x2,y2,a+.35-Math.random()*.15,len*.72,d-1);
   }
-
-  const cx = canvas.width / 2;
-  branch(cx, canvas.height, -Math.PI / 2, canvas.height * .28, 11);
+  branch(c.width/2,c.height,-Math.PI/2,c.height*.28,11);
 }
-
-// ── Falling particles ──
 function animateParticles() {
-  const canvas = document.getElementById('tree-canvas');
-  const ctx = canvas.getContext('2d');
-  const parts = [];
-  const EM = ['🍂','🍁','❤️','💕','🌸'];
-
-  for (let i = 0; i < 60; i++) {
-    parts.push({
-      x: Math.random() * canvas.width,
-      y: -40 - Math.random() * canvas.height * .5,
-      vx: (Math.random() - .5) * 1.5,
-      vy: .8 + Math.random() * 1.4,
-      rot: Math.random() * Math.PI * 2,
-      rv: (Math.random() - .5) * .06,
-      em: EM[Math.floor(Math.random() * EM.length)],
-      size: 16 + Math.random() * 16,
-    });
-  }
-
-  function loop() {
+  const c=document.getElementById('tree-canvas'), ctx=c.getContext('2d');
+  const EM=['🍂','🍁','❤️','💕','🌸','🌹'];
+  const parts=Array.from({length:65},()=>({
+    x:Math.random()*c.width, y:-40-Math.random()*c.height*.5,
+    vx:(Math.random()-.5)*1.5, vy:.8+Math.random()*1.4,
+    rot:Math.random()*Math.PI*2, rv:(Math.random()-.5)*.06,
+    em:EM[Math.floor(Math.random()*EM.length)], size:16+Math.random()*16,
+  }));
+  (function loop(){
     drawTree();
-    parts.forEach(p => {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.font = p.size + 'px serif';
-      ctx.fillText(p.em, -p.size / 2, p.size / 2);
+    parts.forEach(p=>{
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.font=p.size+'px serif'; ctx.fillText(p.em,-p.size/2,p.size/2);
       ctx.restore();
-      p.x  += p.vx;
-      p.y  += p.vy;
-      p.rot += p.rv;
-      if (p.y > canvas.height + 40) {
-        p.y = -40;
-        p.x = Math.random() * canvas.width;
-      }
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rv;
+      if(p.y>c.height+40){ p.y=-40; p.x=Math.random()*c.width; }
     });
     requestAnimationFrame(loop);
-  }
-  loop();
+  })();
 }
+window.addEventListener('resize',()=>{ if(document.getElementById('gugur-overlay').classList.contains('show')) drawTree(); });
 
-window.addEventListener('resize', () => {
-  const c1 = document.getElementById('tree-canvas');
-  if (c1.parentElement.classList.contains('show')) {
-    c1.width  = window.innerWidth;
-    c1.height = window.innerHeight;
-    drawTree();
+/* Tutup panel kalau klik di luar */
+document.addEventListener('click', e => {
+  const panel = document.getElementById('font-panel');
+  const btn   = document.getElementById('font-picker-btn');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+    panel.classList.remove('open');
   }
 });
 </script>
